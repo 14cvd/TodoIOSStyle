@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:todoo_app/model/item_model.dart';
 import 'package:uuid/uuid.dart';
@@ -48,5 +49,15 @@ class ItemNotifier extends StateNotifier<List<ItemModel>> {
         isCompleted: false);
 
     state = [...state, item];
+  }
+
+  void remove(bool value) {
+    state = state.where((element) => element.isCompleted != value).toList();
+
+    debugPrint(state.toString());
+  }
+
+  bool changeSwitch([bool isVisible = false]) {
+    return isVisible;
   }
 }

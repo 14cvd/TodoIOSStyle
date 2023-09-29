@@ -43,8 +43,12 @@ class MainScreen extends ConsumerWidget {
             const Padding(padding: EdgeInsets.all(10)),
             CupertinoListTile(
               trailing: CupertinoSwitch(
-                value: true,
-                onChanged: (value) {},
+                value: ref.watch(cupertinoSwitchProvider),
+                onChanged: (value) {
+                  debugPrint(value.toString());
+                  ref.read(itemProvider.notifier).remove(value);
+                  // ref.read(cupertinoSwitch.notifier).update((state) => value);
+                },
               ),
               title: const Text(
                 'Hide Completed Tasks',
@@ -56,21 +60,52 @@ class MainScreen extends ConsumerWidget {
                 itemCount: item.length,
                 itemBuilder: (context, index) {
                   return Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Card(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(15.0),
-                      ),
-                      child: CupertinoListTile(
-                        title: Text(item[index].title),
-                        subtitle: Text(item[index].subTitle),
-                        trailing: CupertinoCheckbox(
-                          value: item[index].isCompleted,
-                          onChanged: (value) {
-                            ref
-                                .read(itemProvider.notifier)
-                                .toggle(item[index].id);
+                    padding: const EdgeInsets.all(0),
+                    child: CupertinoContextMenu(
+                      actions: [
+                        CupertinoContextMenuAction(
+                          isDestructiveAction: false,
+                          onPressed: () {
+                            Navigator.pop(context);
                           },
+                          isDefaultAction: true,
+                          child: const Text('Copy'),
+                        ),
+                        CupertinoContextMenuAction(
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          child: const Text('Share'),
+                        ),
+                        CupertinoContextMenuAction(
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          child: const Text('Favorite'),
+                        ),
+                        CupertinoContextMenuAction(
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          isDestructiveAction: true,
+                          child: const Text('Delete'),
+                        ),
+                      ],
+                      child: Card(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(15.0),
+                        ),
+                        child: CupertinoListTile(
+                          title: Text(item[index].title),
+                          subtitle: Text(item[index].subTitle),
+                          trailing: CupertinoCheckbox(
+                            value: item[index].isCompleted,
+                            onChanged: (value) {
+                              ref
+                                  .read(itemProvider.notifier)
+                                  .toggle(item[index].id);
+                            },
+                          ),
                         ),
                       ),
                     ),
