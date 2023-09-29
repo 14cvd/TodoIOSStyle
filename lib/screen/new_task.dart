@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:todoo_app/provider/all_provider.dart';
 import 'package:todoo_app/widget/custom_textfield.dart';
-import 'package:todoo_app/widget/selection_color.dart';
 
 // class NewTask extends ConsumerStatefulWidget {
 //   const NewTask({super.key});
@@ -75,10 +74,15 @@ class _NewTaskState extends ConsumerState<NewTask> {
                   child: GestureDetector(
                     child: const Text("Save"),
                     onTap: () {
-                      ref.read(itemProvider.notifier).edited(
-                          titleController.text, descriptionController.text);
+                      if (titleController.text.isNotEmpty &&
+                          descriptionController.text.isNotEmpty) {
+                        ref.read(itemProvider.notifier).edited(
+                              titleController.text,
+                              descriptionController.text,
+                            );
 
-                      Navigator.pop(context);
+                        Navigator.pop(context);
+                      }
                     },
                   ),
                 )
@@ -100,7 +104,7 @@ class _NewTaskState extends ConsumerState<NewTask> {
               child: CupertinoListTile(
                 title: const Text("Title"),
                 subtitle: CustomTextField(
-                    controller: TextEditingController(),
+                    controller: titleController,
                     hintText: "e.g Buy Iphone 11 pro"),
               ),
             ),
@@ -112,53 +116,12 @@ class _NewTaskState extends ConsumerState<NewTask> {
               child: CupertinoListTile(
                 title: const Text("Description"),
                 subtitle: CustomTextField(
-                    controller: TextEditingController(),
-                    hintText: "[opitional]"),
+                    controller: descriptionController, hintText: "[opitional]"),
               ),
             ),
-            const Padding(
-              padding: EdgeInsets.all(16),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: <Widget>[
-                  SelectionColor(
-                    appColor: CupertinoColors.destructiveRed,
-                  ),
-                  SelectionColor(
-                    appColor: CupertinoColors.extraLightBackgroundGray,
-                  ),
-                  SelectionColor(
-                    appColor: CupertinoColors.activeBlue,
-                  ),
-                  SelectionColor(
-                    appColor: CupertinoColors.activeGreen,
-                  ),
-                  SelectionColor(
-                    appColor: CupertinoColors.activeOrange,
-                  ),
-                  SelectionColor(
-                    appColor: CupertinoColors.inactiveGray,
-                  ),
-                  SelectionColor(
-                    appColor: CupertinoColors.systemMint,
-                  ),
-                  SelectionColor(
-                    appColor: CupertinoColors.systemIndigo,
-                  )
-                ],
-              ),
-            )
           ],
         ),
       ),
     );
   }
 }
-
-/**
- * 
- * 
-
- * 
- */
-
